@@ -1,3 +1,25 @@
+# Prompt Template Context Snapshot
+
+- File Path: /docs/Prompt_Template.md
+- Purpose: ใช้เป็นเทมเพลตมาตรฐานสำหรับสร้างและอธิบายโมดูลใหม่ในโปรเจกต์ ThaiSocial
+- โครงสร้างประกอบด้วย:
+  - Context Snapshot (Frontend/Backend Path, Tech Stack)
+  - API Spec (RESTful endpoints)
+  - DB Schema (ตารางหลักและฟิลด์สำคัญ)
+  - UI Components (ชื่อและพฤติกรรม)
+  - Dependencies (ไลบรารี/โมดูลที่เกี่ยวข้อง)
+  - Security (มาตรการความปลอดภัย)
+  - Testing (แนวทางการทดสอบ)
+  - Version (ความเข้ากันได้)
+  - Output (ข้อกำหนดการส่งงาน)
+
+- ข้อควรปฏิบัติ:
+  - ทุกโมดูลใหม่ควรมีเอกสารตามเทมเพลตนี้ใน docs/module_snapshots/[module_name].md
+  - ทุกครั้งที่สร้างหรือแก้ไขโมดูล ให้ update เอกสาร snapshot ให้ตรงกับโค้ดจริง
+  - ใช้เทมเพลตนี้เป็นแนวทางในการสื่อสารและส่งงานระหว่างทีม
+
+- อัปเดตล่าสุด: 2025-06-09
+
 ## Recommended Full Prompt Template
 
 

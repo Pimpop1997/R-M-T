@@ -1,4 +1,3 @@
-
 # Auth Module Context Snapshot
 
 - Frontend Path: /frontend/src/modules/auth
@@ -6,11 +5,13 @@
 - Tech Stack: React + Tailwind (frontend), Node.js + Supabase (backend)
 
 API Spec:
+
 - POST /api/auth/register
 - POST /api/auth/login
 - GET /api/auth/profile
 
 DB Schema:
+
 - Table: users
   - id: UUID, primary key
   - username: text, unique, not null
@@ -19,18 +20,23 @@ DB Schema:
   - created_at: timestamp, default now()
 
 UI Components:
+
 - RegisterForm
 - LoginForm
 - UserProfile
 
 Dependencies:
-- utils/auth.ts, Supabase Client v2.0.1
+
+- utils/auth.ts
+- Supabase Client v2.0.1
 
 Security:
+
 - Uses JWT, expires in 1hr
 - Password hashed with bcrypt
 
 Testing:
+
 - 80% unit test coverage
 - Integration: test register → login → get profile
 

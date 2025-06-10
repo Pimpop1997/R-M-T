@@ -1,26 +1,32 @@
-
 # chat Module Context Snapshot
 
-- Frontend Path: /frontend/src/modules/[module_name]
-- Backend Path: /backend/functions/[module_name].ts
-- Tech Stack: React + Tailwind (frontend), Node.js + Supabase (backend)
+- Frontend Path: /pages/chat.tsx
+- Backend Path: (Supabase Realtime/Storage, mock data, will connect API later)
+- Tech Stack: React + Tailwind (frontend), Supabase (backend)
 
 API Spec:
-- [Fill here]
+- (Mock data, will connect to Supabase Realtime/Storage API for messages and image upload)
 
 DB Schema:
-- [Fill here]
+- Table: messages
+  - id: serial, primary key
+  - sender: text
+  - text: text
+  - image_url: text (nullable)
+  - created_at: timestamp
 
 UI Components:
-- [Fill here]
+- ChatPage (แชทสาธารณะ, ส่งข้อความ, แนบรูปภาพ, แสดงข้อความเรียลไทม์)
 
 Dependencies:
-- [Fill here]
+- @supabase/supabase-js
+- Tailwind CSS
+- components/Navbar
 
 Security:
-- [Fill here]
+- (จะเพิ่มระบบ auth และตรวจสอบสิทธิ์ในอนาคต)
 
 Testing:
-- [Fill here]
+- Manual UI/UX test, mock data, realtime message flow
 
-Version: v1.0.0 (Compatible with Core v1.0.0)
+Version: v1.0.0 (Mock, will connect API later)
