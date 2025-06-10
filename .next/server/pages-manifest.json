@@ -2,8 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/mining": "pages/mining.js",
-  "/feed": "pages/feed.js",
-  "/chat": "pages/chat.js",
   "/pet-rental": "pages/pet-rental.js"
 }
