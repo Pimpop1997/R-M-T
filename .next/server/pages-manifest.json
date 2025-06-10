@@ -2,9 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/feed": "pages/feed.js",
-  "/mining": "pages/mining.js",
-  "/security-log": "pages/security-log.js",
-  "/admin": "pages/admin.js"
+  "/": "pages/index.js"
 }
