@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import Link from "next/link";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -25,8 +26,7 @@ export default function Home() {
       if (!res.ok) {
         setError(data.message || "เข้าสู่ระบบไม่สำเร็จ");
       } else {
-        // ล็อกอินสำเร็จ: redirect หรือแสดงผลลัพธ์
-        window.location.href = "/feed"; // หรือเปลี่ยนเส้นทางตามต้องการ
+        window.location.href = "/feed";
       }
     } catch (err) {
       setError("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
@@ -42,7 +42,6 @@ export default function Home() {
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-400/40 text-blue-700 animate-fade-in text-center">
           <h1 className="text-3xl font-black mb-2 text-blue-600 tracking-widest flex items-center justify-center gap-2">
             <span className="inline-block w-8 h-8 align-middle">
-              {/* โลโก้ฉลาม SVG ขนาดเล็ก */}
               <svg
                 width="32"
                 height="32"
@@ -120,12 +119,14 @@ export default function Home() {
             >
               เข้าสู่ Feed
             </a>
-            <a
-              href="/auth"
-              className="px-5 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold shadow border border-blue-200 hover:bg-blue-100 transition"
-            >
-              เข้าสู่ระบบ/สมัครสมาชิก
-            </a>
+            <Link href="/register" passHref>
+              <button
+                className="px-5 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold shadow border border-blue-200 hover:bg-blue-100 transition"
+                type="button"
+              >
+                ไปหน้าลงทะเบียน
+              </button>
+            </Link>
           </div>
         </div>
       </div>
