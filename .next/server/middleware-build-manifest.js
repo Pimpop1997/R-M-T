@@ -24,11 +24,6 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/chat.js"
     ],
-    "/credit": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/credit.js"
-    ],
     "/feed": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -38,6 +33,11 @@ self.__BUILD_MANIFEST = {
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/mining.js"
+    ],
+    "/pet-rental": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/pet-rental.js"
     ]
   },
   "ampFirstPages": []
