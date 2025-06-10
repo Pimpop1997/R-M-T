@@ -66,8 +66,14 @@ export default function ChatPage() {
     <>
       <Navbar />
       <div className="hacker-bg min-h-screen flex flex-col items-center justify-center py-4 sm:py-8 px-2 sm:px-0">
-        <div className="w-full max-w-xl bg-[#181c1f] rounded-2xl shadow-2xl p-4 sm:p-8 border border-green-400/30 text-green-300 animate-fade-in">
-          <h2 className="text-xl sm:text-2xl font-black text-green-400 mb-2 sm:mb-4 tracking-widest text-center">RMT Chat</h2>
+        <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-4 sm:p-8 border-2 border-blue-400/40 text-blue-700 animate-fade-in">
+          <h2 className="text-2xl sm:text-3xl font-black text-blue-600 mb-2 sm:mb-4 tracking-widest text-center flex items-center justify-center gap-2">
+            <span className="inline-block w-7 h-7 align-middle">
+              {/* โลโก้ฉลาม SVG ขนาดเล็ก */}
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="16" rx="16" ry="16" fill="#3B82F6"/><path d="M8 20C10 15 22 15 24 20C20 18 12 18 8 20Z" fill="#fff"/><path d="M12 16C13 13 19 13 20 16" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/><circle cx="20.5" cy="17.5" r="1" fill="#3B82F6"/></svg>
+            </span>
+            RMT Chat
+          </h2>
           <div className="flex-1 overflow-y-auto p-2 sm:p-4">
             <div className="max-w-xl mx-auto space-y-2">
               {messages.map((msg) => (
@@ -78,13 +84,13 @@ export default function ChatPage() {
                   <div
                     className={`px-3 sm:px-4 py-2 rounded-2xl shadow text-xs sm:text-sm max-w-[80vw] sm:max-w-xs break-words "
                       ${msg.sender === "user"
-                        ? "bg-indigo-600 text-white rounded-br-none"
-                        : "bg-white text-gray-800 rounded-bl-none border"}
+                        ? "bg-blue-600 text-white rounded-br-none"
+                        : "bg-blue-50 text-blue-800 rounded-bl-none border border-blue-200"}
                     `}
                   >
                     {msg.text}
                     {msg.image_url && (
-                      <img src={msg.image_url} alt="แนบรูปภาพ" className="mt-2 rounded-lg max-h-32 sm:max-h-48 object-contain w-full" />
+                      <img src={msg.image_url} alt="แนบรูปภาพ" className="mt-2 rounded-lg max-h-32 sm:max-h-48 object-contain w-full border border-blue-100" />
                     )}
                   </div>
                 </div>
@@ -94,11 +100,11 @@ export default function ChatPage() {
           </div>
           <form
             onSubmit={handleSend}
-            className="max-w-xl mx-auto w-full flex flex-col sm:flex-row gap-2 p-2 sm:p-4 bg-white border-t"
+            className="max-w-xl mx-auto w-full flex flex-col sm:flex-row gap-2 p-2 sm:p-4 bg-blue-50 border-t border-blue-200 rounded-b-2xl"
           >
             <input
               type="text"
-              className="flex-1 px-3 sm:px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition text-xs sm:text-base"
+              className="flex-1 px-3 sm:px-4 py-2 rounded-full border-2 border-blue-200 focus:outline-none focus:border-blue-400 transition text-xs sm:text-base bg-white"
               placeholder="พิมพ์ข้อความ..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -114,7 +120,7 @@ export default function ChatPage() {
               />
               <button
                 type="button"
-                className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-600 text-base"
+                className="px-3 py-2 bg-blue-100 hover:bg-blue-200 rounded-full text-blue-600 text-base border border-blue-200 transition"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={loading}
                 title="แนบรูปภาพ"
@@ -123,7 +129,7 @@ export default function ChatPage() {
               </button>
               <button
                 type="submit"
-                className="px-4 sm:px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-full shadow-md transition disabled:opacity-60 text-xs sm:text-base"
+                className="px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full shadow-md transition disabled:opacity-60 text-xs sm:text-base"
                 disabled={loading || (!input.trim() && !image)}
               >
                 {loading ? "..." : "ส่ง"}
@@ -133,9 +139,9 @@ export default function ChatPage() {
         </div>
       </div>
       <style jsx global>{`
-        body { background: #101214; }
+        body { background: #f4f8fb; font-family: 'Prompt', 'Kanit', 'Inter', sans-serif; }
         .hacker-bg {
-          background: linear-gradient(135deg, #101214 60%, #1a2a1a 100%);
+          background: linear-gradient(135deg, #e0e7ef 60%, #c7d2fe 100%);
         }
         .animate-fade-in {
           animation: fadeIn 0.7s;

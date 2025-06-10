@@ -1,11 +1,12 @@
 import React from "react";
 import Link from "next/link";
+import BrandLogo from "./BrandLogo";
 
 export default function Navbar() {
   return (
     <nav className="w-full flex items-center justify-between px-6 py-3 bg-[#101214] border-b border-green-400/30 shadow-md">
       <div className="flex items-center gap-3">
-        <span className="text-green-400 font-black text-xl tracking-widest drop-shadow-lg">RMT by Sharky</span>
+        <BrandLogo />
       </div>
       <div className="flex gap-4 text-green-300 font-semibold">
         <Link href="/feed" className="hover:text-green-400 transition">Feed</Link>

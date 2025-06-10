@@ -38,26 +38,91 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen w-full hacker-bg">
-        <div className="w-full max-w-lg bg-[#181c1f] rounded-2xl shadow-2xl p-8 border border-green-400/30 text-green-300 animate-fade-in text-center">
-          <h1 className="text-3xl font-black mb-2 text-green-400 tracking-widest drop-shadow-lg">
+      <div className="flex flex-col items-center justify-center min-h-screen w-full hacker-bg px-2 sm:px-0">
+        <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-400/40 text-blue-700 animate-fade-in text-center">
+          <h1 className="text-3xl font-black mb-2 text-blue-600 tracking-widest flex items-center justify-center gap-2">
+            <span className="inline-block w-8 h-8 align-middle">
+              {/* โลโก้ฉลาม SVG ขนาดเล็ก */}
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <ellipse
+                  cx="16"
+                  cy="16"
+                  rx="16"
+                  ry="16"
+                  fill="#3B82F6"
+                />
+                <path
+                  d="M8 20C10 15 22 15 24 20C20 18 12 18 8 20Z"
+                  fill="#fff"
+                />
+                <path
+                  d="M12 16C13 13 19 13 20 16"
+                  stroke="#fff"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx="20.5"
+                  cy="17.5"
+                  r="1"
+                  fill="#3B82F6"
+                />
+              </svg>
+            </span>
             RMT by Sharky
           </h1>
-          <p className="mb-4 text-green-200">
+          <p className="mb-4 text-blue-400">
             แพลตฟอร์มโซเชียลมีเดียสายแฮกเกอร์
             <br />
             โพสต์ แชท ขุดเครดิต เช่าสัตว์เลี้ยง และอีกมากมาย!
           </p>
-          <div className="flex flex-wrap gap-3 justify-center mt-6">
+          <form
+            onSubmit={handleLogin}
+            className="space-y-3 max-w-xs mx-auto mb-6"
+          >
+            <input
+              className="w-full px-4 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-400 transition text-base"
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              className="w-full px-4 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-400 transition text-base"
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {error && (
+              <div className="text-red-500 text-center text-sm">{error}</div>
+            )}
+            <button
+              type="submit"
+              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-base shadow transition"
+              disabled={loading}
+            >
+              {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
+            </button>
+          </form>
+          <div className="flex flex-wrap gap-3 justify-center mt-2">
             <a
               href="/feed"
-              className="px-5 py-2 bg-green-700 text-black rounded-lg font-bold shadow hover:bg-green-600 transition"
+              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow transition"
             >
               เข้าสู่ Feed
             </a>
             <a
               href="/auth"
-              className="px-5 py-2 bg-[#23272b] text-green-300 rounded-lg font-bold shadow border border-green-400/40 hover:bg-green-900/60 transition"
+              className="px-5 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold shadow border border-blue-200 hover:bg-blue-100 transition"
             >
               เข้าสู่ระบบ/สมัครสมาชิก
             </a>
@@ -66,10 +131,11 @@ export default function Home() {
       </div>
       <style jsx global>{`
         body {
-          background: #101214;
+          background: #f4f8fb;
+          font-family: "Prompt", "Kanit", "Inter", sans-serif;
         }
         .hacker-bg {
-          background: linear-gradient(135deg, #101214 60%, #1a2a1a 100%);
+          background: linear-gradient(135deg, #e0e7ef 60%, #c7d2fe 100%);
         }
         .animate-fade-in {
           animation: fadeIn 0.7s;
