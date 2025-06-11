@@ -1,11 +1,26 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-
-const mockPets = [
-  { name: "แมวน้ำ", image: "/pet-seal.png", bonus: 10, rent: 50 },
-  { name: "กระต่ายทอง", image: "/pet-rabbit.png", bonus: 25, rent: 200 },
-];
+import supabase from "../utils/supabaseClient";
 
 export default function Pet() {
+  const [pets, setPets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchPets() {
+      setLoading(true);
+      setError("");
+      const { data, error } = await supabase
+        .from("pets")
+        .select("id,name,image,bonus,price");
+      if (error) setError("โหลดข้อมูลสัตว์เลี้ยงไม่สำเร็จ");
+      else setPets(data || []);
+      setLoading(false);
+    }
+    fetchPets();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -31,28 +46,65 @@ export default function Pet() {
             </span>
             เช่าสัตว์เลี้ยง
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {mockPets.map((pet) => (
-              <div
-                key={pet.name}
-                className="bg-blue-50 rounded-xl p-4 flex flex-col items-center shadow border border-blue-100"
-              >
-                <img
-                  src={pet.image}
-                  className="w-16 h-16 rounded-full mb-2 border-2 border-blue-200"
-                />
-                <span className="font-bold text-lg text-blue-700">
-                  {pet.name}
-                </span>
-                <span className="text-xs text-blue-400">
-                  โบนัส +{pet.bonus}%
-                </span>
-                <button className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded font-bold transition shadow">
-                  เช่า {pet.rent} เครดิต/วัน
-                </button>
-              </div>
-            ))}
-          </div>
+          {error && (
+            <div className="text-red-500 text-center mb-4" role="alert">
+              {error}
+            </div>
+          )}
+          {loading ? (
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              aria-busy="true"
+            >
+              {[...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-blue-50 rounded-xl p-4 flex flex-col items-center shadow border border-blue-100 animate-pulse min-h-[170px]"
+                  aria-hidden="true"
+                >
+                  <div className="w-16 h-16 rounded-full mb-2 bg-blue-100" />
+                  <div className="h-4 w-20 bg-blue-100 rounded mb-1" />
+                  <div className="h-3 w-16 bg-blue-100 rounded mb-2" />
+                  <div className="h-8 w-24 bg-blue-200 rounded" />
+                </div>
+              ))}
+            </div>
+          ) : pets.length === 0 ? (
+            <div className="text-center text-blue-400 py-8">
+              ไม่พบสัตว์เลี้ยงในระบบ
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {pets.map((pet) => (
+                <div
+                  key={pet.id}
+                  className="bg-blue-50 rounded-xl p-4 flex flex-col items-center shadow border border-blue-100 transition-transform hover:scale-105 hover:shadow-xl focus-within:scale-105 focus-within:shadow-xl outline-none"
+                  tabIndex={0}
+                  aria-label={`ข้อมูลสัตว์เลี้ยง ${pet.name}`}
+                >
+                  <img
+                    src={pet.image || "/pet-default.png"}
+                    alt={pet.name}
+                    className="w-16 h-16 rounded-full mb-2 border-2 border-blue-200 object-cover shadow-sm"
+                    loading="lazy"
+                  />
+                  <span className="font-bold text-lg text-blue-700">
+                    {pet.name}
+                  </span>
+                  <span className="text-xs text-blue-400">
+                    โบนัส +{pet.bonus}%
+                  </span>
+                  <button
+                    className="mt-3 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-1.5 rounded font-bold transition shadow focus:ring-2 focus:ring-blue-300 focus:outline-none active:scale-95"
+                    aria-label={`เช่าสัตว์เลี้ยง ${pet.name} ราคา ${pet.price} เครดิตต่อวัน`}
+                    disabled={loading}
+                  >
+                    เช่า {pet.price} เครดิต/วัน
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <footer className="text-center p-4 bg-transparent text-blue-400">

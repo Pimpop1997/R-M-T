@@ -38,17 +38,12 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen w-full hacker-bg px-2 sm:px-0">
-        <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-400/40 text-blue-700 animate-fade-in text-center">
-          <h1 className="text-3xl font-black mb-2 text-blue-600 tracking-widest flex items-center justify-center gap-2">
-            <span className="inline-block w-8 h-8 align-middle">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+      <div className="hacker-bg min-h-screen flex flex-col items-center justify-center py-8 px-2">
+        <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-400/40 text-blue-700 animate-fade-in flex flex-col items-center">
+          <h1 className="text-4xl font-black text-blue-600 mb-4 flex items-center gap-3 justify-center">
+            <span className="inline-block w-10 h-10 align-middle">
+              {/* โลโก้ฉลาม SVG */}
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
                 <ellipse
                   cx="16"
                   cy="16"
@@ -74,59 +69,65 @@ export default function Home() {
                 />
               </svg>
             </span>
-            RMT by Sharky
+            SocialPoints
           </h1>
-          <p className="mb-4 text-blue-400">
-            แพลตฟอร์มโซเชียลมีเดียสายแฮกเกอร์
-            <br />
-            โพสต์ แชท ขุดเครดิต เช่าสัตว์เลี้ยง และอีกมากมาย!
+          <div className="text-blue-400 font-bold text-lg mb-2 tracking-wide">
+            RMT by Sharky
+          </div>
+          <p className="mb-6 text-blue-500 text-center text-base sm:text-lg">
+            ระบบสะสมแต้ม &amp; โซเชียลเกม <br className="sm:hidden" />แลกเปลี่ยนเครดิต{" "}
+            <span className="hidden sm:inline">|</span> เพื่อน{" "}
+            <span className="hidden sm:inline">|</span> รางวัล{" "}
+            <span className="hidden sm:inline">|</span> Chat{" "}
+            <span className="hidden sm:inline">|</span> Mining{" "}
+            <span className="hidden sm:inline">|</span> Pet
           </p>
-          <form
-            onSubmit={handleLogin}
-            className="space-y-3 max-w-xs mx-auto mb-6"
-          >
-            <input
-              className="w-full px-4 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-400 transition text-base"
-              placeholder="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              className="w-full px-4 py-2 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-400 transition text-base"
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {error && (
-              <div className="text-red-500 text-center text-sm">{error}</div>
-            )}
-            <button
-              type="submit"
-              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-base shadow transition"
-              disabled={loading}
-            >
-              {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
-            </button>
-          </form>
-          <div className="flex flex-wrap gap-3 justify-center mt-2">
-            <a
-              href="/feed"
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow transition"
-            >
-              เข้าสู่ Feed
+          <Link href="/auth" legacyBehavior>
+            <a className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md text-lg text-center transition block mb-4">
+              🚀 เริ่มต้นใช้งาน / สมัครสมาชิก
             </a>
-            <Link href="/register" passHref>
-              <button
-                className="px-5 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold shadow border border-blue-200 hover:bg-blue-100 transition"
-                type="button"
-              >
-                ไปหน้าลงทะเบียน
-              </button>
+          </Link>
+          <div className="w-full flex flex-wrap gap-2 justify-center mt-2 mb-4">
+            <Link href="/feed" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Feed
+              </a>
             </Link>
+            <Link href="/chat" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Chat
+              </a>
+            </Link>
+            <Link href="/credit" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Credit
+              </a>
+            </Link>
+            <Link href="/pet" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Pet
+              </a>
+            </Link>
+            <Link href="/mining" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Mining
+              </a>
+            </Link>
+            <Link href="/pet-rental" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Pet Rental
+              </a>
+            </Link>
+            <Link href="/security-log" legacyBehavior>
+              <a className="px-4 py-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition text-sm">
+                Security Log
+              </a>
+            </Link>
+          </div>
+          <div className="w-full mt-4">
+            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 text-blue-600 text-sm text-center">
+              <b>ฟีเจอร์เด่น:</b> โพสต์/Feed, แชท, โอน/ยืมเครดิต, ขุดเหรียญ, สัตว์เลี้ยง, ระบบแอดมิน, ความปลอดภัยสูง, UI ทันสมัย รองรับมือถือเต็มรูปแบบ
+            </div>
           </div>
         </div>
       </div>

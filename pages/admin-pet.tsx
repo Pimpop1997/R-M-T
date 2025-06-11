@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import supabase from "../utils/supabaseClient";
 
 export default function AdminPetDashboard() {
   const [pets, setPets] = useState([
@@ -10,28 +11,73 @@ export default function AdminPetDashboard() {
   const [editId, setEditId] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", bonus: "", price: "", type: "รายวัน" });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchPets();
+  }, []);
+
+  async function fetchPets() {
+    setLoading(true);
+    setError("");
+    const { data, error } = await supabase.from("pets").select("id,name,bonus,price,type");
+    if (error) setError("โหลดข้อมูลสัตว์เลี้ยงไม่สำเร็จ");
+    else setPets(data || []);
+    setLoading(false);
+  }
 
   const handleEdit = (pet: any) => {
     setEditId(pet.id);
     setForm({ name: pet.name, bonus: String(pet.bonus * 100), price: String(pet.price), type: pet.type });
   };
 
-  const handleSave = (id: number) => {
-    setPets(pets.map(p => p.id === id ? { ...p, name: form.name, bonus: Number(form.bonus) / 100, price: Number(form.price), type: form.type } : p));
-    setEditId(null);
-    setMessage("บันทึกข้อมูลสัตว์เลี้ยงสำเร็จ");
+  const handleSave = async (id: number) => {
+    setLoading(true);
+    setError("");
+    const { error } = await supabase.from("pets").update({
+      name: form.name,
+      bonus: Number(form.bonus) / 100,
+      price: Number(form.price),
+      type: form.type
+    }).eq("id", id);
+    if (error) setError("บันทึกข้อมูลไม่สำเร็จ");
+    else {
+      setMessage("บันทึกข้อมูลสัตว์เลี้ยงสำเร็จ");
+      setEditId(null);
+      fetchPets();
+    }
+    setLoading(false);
   };
 
-  const handleAdd = () => {
-    const newId = pets.length ? Math.max(...pets.map(p => p.id)) + 1 : 1;
-    setPets([...pets, { id: newId, name: form.name, bonus: Number(form.bonus) / 100, price: Number(form.price), type: form.type }]);
-    setForm({ name: "", bonus: "", price: "", type: "รายวัน" });
-    setMessage("เพิ่มสัตว์เลี้ยงใหม่สำเร็จ");
+  const handleAdd = async () => {
+    setLoading(true);
+    setError("");
+    const { error } = await supabase.from("pets").insert({
+      name: form.name,
+      bonus: Number(form.bonus) / 100,
+      price: Number(form.price),
+      type: form.type
+    });
+    if (error) setError("เพิ่มสัตว์เลี้ยงไม่สำเร็จ");
+    else {
+      setMessage("เพิ่มสัตว์เลี้ยงใหม่สำเร็จ");
+      setForm({ name: "", bonus: "", price: "", type: "รายวัน" });
+      fetchPets();
+    }
+    setLoading(false);
   };
 
-  const handleDelete = (id: number) => {
-    setPets(pets.filter(p => p.id !== id));
-    setMessage("ลบสัตว์เลี้ยงสำเร็จ");
+  const handleDelete = async (id: number) => {
+    setLoading(true);
+    setError("");
+    const { error } = await supabase.from("pets").delete().eq("id", id);
+    if (error) setError("ลบสัตว์เลี้ยงไม่สำเร็จ");
+    else {
+      setMessage("ลบสัตว์เลี้ยงสำเร็จ");
+      fetchPets();
+    }
+    setLoading(false);
   };
 
   return (
@@ -46,53 +92,58 @@ export default function AdminPetDashboard() {
             </span>
             RMT Admin Pet
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full mb-4 sm:mb-8 border text-xs sm:text-base bg-blue-50 rounded-xl">
-              <thead>
-                <tr className="bg-blue-100">
-                  <th className="py-2 px-2">ชื่อ</th>
-                  <th className="py-2 px-2">โบนัส (%)</th>
-                  <th className="py-2 px-2">ราคา</th>
-                  <th className="py-2 px-2">ประเภท</th>
-                  <th className="py-2 px-2">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pets.map((pet) => (
-                  <tr key={pet.id} className="text-center border-t">
-                    {editId === pet.id ? (
-                      <>
-                        <td><input className="border-2 border-blue-200 rounded px-2 py-1 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></td>
-                        <td><input className="border-2 border-blue-200 rounded px-2 py-1 w-12 sm:w-16 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" type="number" value={form.bonus} onChange={e => setForm(f => ({ ...f, bonus: e.target.value }))} /></td>
-                        <td><input className="border-2 border-blue-200 rounded px-2 py-1 w-16 sm:w-20 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} /></td>
-                        <td>
-                          <select className="border-2 border-blue-200 rounded px-2 py-1 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}>
-                            <option value="รายวัน">รายวัน</option>
-                            <option value="รายเดือน">รายเดือน</option>
-                          </select>
-                        </td>
-                        <td>
-                          <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2 text-xs sm:text-base transition" onClick={() => handleSave(pet.id)}>บันทึก</button>
-                          <button className="bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded text-xs sm:text-base transition" onClick={() => setEditId(null)}>ยกเลิก</button>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td>{pet.name}</td>
-                        <td>+{pet.bonus * 100}%</td>
-                        <td>{pet.price}</td>
-                        <td>{pet.type}</td>
-                        <td>
-                          <button className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded mr-2 text-xs sm:text-base transition" onClick={() => handleEdit(pet)}>แก้ไข</button>
-                          <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs sm:text-base transition" onClick={() => handleDelete(pet.id)}>ลบ</button>
-                        </td>
-                      </>
-                    )}
+          {error && <div className="text-red-500 text-center mb-2">{error}</div>}
+          {loading ? (
+            <div className="text-center text-blue-400 py-8">กำลังโหลด...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full mb-4 sm:mb-8 border text-xs sm:text-base bg-blue-50 rounded-xl">
+                <thead>
+                  <tr className="bg-blue-100">
+                    <th className="py-2 px-2">ชื่อ</th>
+                    <th className="py-2 px-2">โบนัส (%)</th>
+                    <th className="py-2 px-2">ราคา</th>
+                    <th className="py-2 px-2">ประเภท</th>
+                    <th className="py-2 px-2">จัดการ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {pets.map((pet) => (
+                    <tr key={pet.id} className="text-center border-t">
+                      {editId === pet.id ? (
+                        <>
+                          <td><input className="border-2 border-blue-200 rounded px-2 py-1 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></td>
+                          <td><input className="border-2 border-blue-200 rounded px-2 py-1 w-12 sm:w-16 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" type="number" value={form.bonus} onChange={e => setForm(f => ({ ...f, bonus: e.target.value }))} /></td>
+                          <td><input className="border-2 border-blue-200 rounded px-2 py-1 w-16 sm:w-20 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} /></td>
+                          <td>
+                            <select className="border-2 border-blue-200 rounded px-2 py-1 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}>
+                              <option value="รายวัน">รายวัน</option>
+                              <option value="รายเดือน">รายเดือน</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2 text-xs sm:text-base transition" onClick={() => handleSave(pet.id)}>บันทึก</button>
+                            <button className="bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded text-xs sm:text-base transition" onClick={() => setEditId(null)}>ยกเลิก</button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{pet.name}</td>
+                          <td>+{pet.bonus * 100}%</td>
+                          <td>{pet.price}</td>
+                          <td>{pet.type}</td>
+                          <td>
+                            <button className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded mr-2 text-xs sm:text-base transition" onClick={() => handleEdit(pet)}>แก้ไข</button>
+                            <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs sm:text-base transition" onClick={() => handleDelete(pet.id)}>ลบ</button>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
           <div className="mb-2 sm:mb-4 font-semibold text-sm sm:text-base text-blue-600">เพิ่มสัตว์เลี้ยงใหม่</div>
           <div className="flex gap-2 mb-4 sm:mb-6 flex-wrap">
             <input className="border-2 border-blue-200 rounded px-2 py-1 text-xs sm:text-base focus:outline-none focus:border-blue-400 transition" placeholder="ชื่อ" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />

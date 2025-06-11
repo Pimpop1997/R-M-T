@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import supabase from "../../../../utils/supabaseClient";
 
 export default function UserProfile() {
   const [user, setUser] = useState<any>(null);
@@ -6,22 +7,38 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("กรุณาเข้าสู่ระบบก่อน");
+    async function fetchProfile() {
+      setLoading(true);
+      setError("");
+      try {
+        // ลองใช้ supabase auth ก่อน ถ้าไม่มี session ค่อย fallback ไป token
+        const { data: { user: supaUser } } = await supabase.auth.getUser();
+        if (supaUser) {
+          // ดึงข้อมูล user จาก table users
+          const { data, error } = await supabase
+            .from("users")
+            .select("id,username,email,created_at")
+            .eq("id", supaUser.id)
+            .single();
+          if (error) throw error;
+          setUser(data);
+        } else {
+          // fallback: ใช้ token เดิม (กรณี SSR/CSR ไม่ตรงกัน)
+          const token = localStorage.getItem("token");
+          if (!token) throw new Error("กรุณาเข้าสู่ระบบก่อน");
+          const res = await fetch("/api/auth/profile", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.user) setUser(data.user);
+          else throw new Error(data.error || "ไม่พบข้อมูลผู้ใช้");
+        }
+      } catch (err: any) {
+        setError(err.message || "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+      }
       setLoading(false);
-      return;
     }
-    fetch("/api/auth/profile", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.user) setUser(data.user);
-        else setError(data.error || "ไม่พบข้อมูลผู้ใช้");
-      })
-      .catch(() => setError("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์"))
-      .finally(() => setLoading(false));
+    fetchProfile();
   }, []);
 
   if (loading) return <div className="text-center py-8 text-blue-600">กำลังโหลด...</div>;
