@@ -1,5 +1,3 @@
-
-```typescript
 import React, { useState } from "react";
 
 export default function BorrowCreditForm() {
@@ -34,4 +32,3 @@ export default function BorrowCreditForm() {
     </div>
   );
 }
-```
