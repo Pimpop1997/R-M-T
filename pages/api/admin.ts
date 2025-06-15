@@ -57,7 +57,7 @@ export async function adminCreditAction(req: NextApiRequest, res: NextApiRespons
   if (!await isAdmin(userId)) return res.status(403).json({ error: 'forbidden' });
   const { target, amount, action } = req.body;
   if (!target || !amount || amount <= 0) return res.status(400).json({ error: 'ข้อมูลไม่ครบ' });
-  const { data: user } = await supabase.from('users').select('credit').eq('username', target).single();
+  const { data: user } = await supabase.from('users').select('id,credit').eq('username', target).single();
   if (!user) return res.status(404).json({ error: 'ไม่พบผู้ใช้' });
   let newCredit = user.credit;
   if (action === 'transfer') newCredit += amount;
