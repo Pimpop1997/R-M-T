@@ -1,7 +1,7 @@
 # Auth Module Context Snapshot
 
 - Frontend Path: /frontend/src/modules/auth
-- Backend Path: /backend/functions/auth.ts
+- Backend Path: /pages/api/auth/*.ts
 - Tech Stack: React + Tailwind (frontend), Node.js + Supabase (backend)
 
 API Spec:

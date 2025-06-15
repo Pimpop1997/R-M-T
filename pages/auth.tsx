@@ -1,6 +1,6 @@
-import RegisterForm from "../../frontend/src/modules/auth/RegisterForm";
-import LoginForm from "../../frontend/src/modules/auth/LoginForm";
-import UserProfile from "../../frontend/src/modules/auth/UserProfile";
+import RegisterForm from "../frontend/src/modules/auth/RegisterForm";
+import LoginForm from "../frontend/src/modules/auth/LoginForm";
+import UserProfile from "../frontend/src/modules/auth/UserProfile";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 
